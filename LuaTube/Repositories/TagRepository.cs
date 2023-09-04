@@ -12,7 +12,7 @@ public class TagRepository : ITagRepository
     public void Create(Tag model)
     {
         MySqlConnection connection = new(connectionString);
-        string sql = "insert into Genre(Name) values (@Name)";
+        string sql = "insert into Tag(Name) values (@Name)";
         MySqlCommand command = new(sql, connection)
         {
             CommandType = CommandType.Text
@@ -48,20 +48,20 @@ public class TagRepository : ITagRepository
             CommandType = CommandType.Text
         };
         
-        List<Tag> tags = new();
+        List<Tag> Tags = new();
         connection.Open();
         MySqlDataReader reader = command.ExecuteReader();
         while (reader.Read())
         {
-            Tag tag = new()
+            Tag Tag = new()
             {
                 Id = reader.GetByte("id"),
                 Name = reader.GetString("name")
             };
-            tags.Add(tag);
+            Tags.Add(Tag);
         }
         connection.Close();
-        return tags;
+        return Tags;
     }
 
     public Tag ReadById(int? id)
@@ -79,13 +79,13 @@ public class TagRepository : ITagRepository
         reader.Read();
         if (reader.HasRows)
         {
-            Tag tag = new()
+            Tag Tag = new()
             {
                 Id = reader.GetByte("id"),
                 Name = reader.GetString("name")
             };
             connection.Close();
-            return tag;
+            return Tag;
         }
         connection.Close();
         return null;
